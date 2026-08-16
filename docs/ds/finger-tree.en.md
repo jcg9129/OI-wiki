@@ -76,7 +76,7 @@ Finger trees provide amortized constant-time access to the tree's "fingers" (lea
 
 | Operation                            | Finger tree                    | Annotated 2-3 tree | List             | Vector |
 | ----------------------------- | ---------------------- | ----------------------------- | -------------------- | ---------- |
-| `const`,`snoc`                | $O(1)$                 | $O(\log n)$                   | $O(1)$/$O(n)$        | $O(n)$     |
+| `cons`,`snoc`                 | $O(1)$                 | $O(\log n)$                   | $O(1)$/$O(n)$        | $O(n)$     |
 | `viewl`,`viewr`               | $O(1)$                 | $O(\log n)$                   | $O(1)$/$O(n)$        | $O(1)$     |
 | `measure`/`length`            | $O(1)$                 | $O(1)$                        | $O(n)$               | $O(1)$     |
 | `append`                      | $O(\log \min(l1, l2))$ | $O(\log n)$                   | $O(n)$               | $O(m+n)$   |

@@ -28,11 +28,11 @@ std::string s;
 
 ### Converting to a char array
 
-In the C language, there are also many string functions, but their parameters are all of char pointer type; for convenience of use, `string` has two member functions that can convert itself to a char pointer——`data()`/`c_str()` (they are almost the same, but it is best to use `c_str()`, because `c_str()` guarantees a null character at the end, while `data()` does not), for example:
+In the C language, there are also many string functions, but their parameters are all of char pointer type; for convenience of use, `string` has two member functions that can convert itself to a char pointer——`data()`/`c_str()` (before C++11, `c_str()` guarantees a null character at the end while `data()` does not; since C++11 the two behave identically[^string1]), for example:
 
 ```cpp
-printf("%s", s);          // compilation error
-printf("%s", s.data());   // compiles, but is undefined behavior
+printf("%s", s);          // not guaranteed to compile; behavior is undefined
+printf("%s", s.data());   // undefined behavior before C++11; outputs correctly since C++11
 printf("%s", s.c_str());  // definitely outputs correctly
 ```
 
@@ -149,3 +149,7 @@ Output:
 The string obtained after replacing positions 3~7 of string s with the empty string is OI
 The string obtained after replacing the first two positions of string s with NOI is NOI
 ```
+
+## References and notes
+
+[^string1]: [C++ standard draft \[basic.string\]](https://eel.is/c++draft/basic.string#general-3)
