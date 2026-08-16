@@ -1,2 +1,8 @@
 op.md
 binary-set.md
+
+# English (and other non-zh) translations: the remark pipeline runs
+# remark-copywriting-correct, whose CJK punctuation/spacing rules corrupt
+# Latin-script prose (e.g. it strips the space in "**OI** (Olympiad)").
+# Skip locale-suffixed files so the formatter never rewrites them.
+*.en.md

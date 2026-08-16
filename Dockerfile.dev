@@ -1,0 +1,26 @@
+# Development image for previewing the local working tree (incl. the i18n
+# English build) with `mkdocs serve` and live reload. This is intentionally
+# separate from the top-level Dockerfile, which clones a fresh copy from GitHub
+# and drops into a shell. We only need enough to run MkDocs — no Node/Yarn,
+# since serving does not run the JS toolchain.
+#
+# The source is COPYed in (not bind-mounted) so it works with Compose `watch`,
+# which syncs changed files into this baseline but does no initial sync. See
+# docker-compose.dev.yml. Dependencies (.venv) and vendored theme assets are
+# built at container start, not baked here.
+FROM python:3.12-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# uv (Python dependency manager used by this project)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin:${PATH}"
+
+WORKDIR /OI-wiki
+COPY . /OI-wiki
+
+EXPOSE 8000
+
+CMD ["bash", "scripts/docker-serve.sh"]

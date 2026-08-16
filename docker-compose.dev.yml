@@ -1,0 +1,39 @@
+# Local preview of the wiki (including the English /en/ build) with live reload
+# driven by Compose `watch`.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up --build --watch
+# Then open http://localhost:8000  (English at http://localhost:8000/en/).
+#
+# Why `watch` instead of a bind mount: Compose copies changed files directly
+# into the container, so mkdocs' file watcher sees real local writes and
+# reloads reliably — no dependency on the host mount propagating inotify events
+# (which sshfs/9p mounts don't). The source is baked into the image (COPY in
+# Dockerfile.dev) as the baseline; `watch` only syncs edits on top of it.
+services:
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    # .venv lives in a named volume so the container builds its own dependencies
+    # and never collides with a host .venv.
+    volumes:
+      - venv:/OI-wiki/.venv
+    develop:
+      watch:
+        # Content edits: sync into the container; mkdocs live-reloads them.
+        - action: sync
+          path: ./docs
+          target: /OI-wiki/docs
+        # Config / hooks are read at startup, so a change needs a restart.
+        - action: sync+restart
+          path: ./mkdocs.yml
+          target: /OI-wiki/mkdocs.yml
+        - action: sync+restart
+          path: ./hooks
+          target: /OI-wiki/hooks
+
+volumes:
+  venv:

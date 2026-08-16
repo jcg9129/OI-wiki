@@ -1,0 +1,14 @@
+# Build-context excludes for Dockerfile.dev (COPY . /OI-wiki).
+# Keep the context small and free of host-specific artifacts; the container
+# rebuilds its own .venv (named volume) and vendors theme assets at start.
+.git
+.venv
+node_modules
+site
+.debug
+**/__pycache__
+*.pyc
+*.tmp
+
+# The dev container serves from source and does not run the JS toolchain,
+# so none of the Node/site build outputs are needed in the image.
